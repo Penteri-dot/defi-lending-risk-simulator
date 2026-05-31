@@ -4,7 +4,8 @@ PIP    := .venv/bin/pip
 .PHONY: install run test
 
 install:
-	/opt/homebrew/bin/python3.13 -m venv .venv
+	@python3 -c "import sys; v=sys.version_info; sys.exit(0) if v>=(3,10) else (print('Error: Python 3.10+ required, found '+'.'.join(str(x) for x in v[:3])) or sys.exit(1))"
+	python3 -m venv .venv
 	$(PIP) install -q -r requirements.txt
 
 run:

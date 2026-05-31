@@ -17,7 +17,7 @@ import type {
 
 // ── Default demo portfolio ────────────────────────────────────────────────────
 
-const DEFAULT_PORTFOLIO: Portfolio = {
+export const DEFAULT_PORTFOLIO: Portfolio = {
   collateral: [
     { asset: "BTC", amount: 0.5 },
     { asset: "ETH", amount: 10 },
@@ -59,6 +59,7 @@ interface PortfolioContextValue {
   addBorrow: (pos: Position) => void;
   removeBorrow: (index: number) => void;
   updatePrice: (asset: AssetSymbol, price: number) => void;
+  resetPortfolio: () => void;
 }
 
 const PortfolioContext = createContext<PortfolioContextValue | null>(null);
@@ -140,6 +141,10 @@ export function PortfolioProvider({ children }: { children: React.ReactNode }) {
     }));
   }, []);
 
+  const resetPortfolio = useCallback(() => {
+    setPortfolio(DEFAULT_PORTFOLIO);
+  }, []);
+
   return (
     <PortfolioContext.Provider
       value={{
@@ -152,6 +157,7 @@ export function PortfolioProvider({ children }: { children: React.ReactNode }) {
         addBorrow,
         removeBorrow,
         updatePrice,
+        resetPortfolio,
       }}
     >
       {children}

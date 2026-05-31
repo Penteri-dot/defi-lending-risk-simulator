@@ -72,17 +72,38 @@ export function Portfolio() {
     addBorrow,
     removeBorrow,
     updatePrice,
+    resetPortfolio,
   } = usePortfolio();
 
+  const [showResetModal, setShowResetModal] = useState(false);
   const { collateral, borrows, prices } = portfolio;
+
+  function handleResetConfirm() {
+    resetPortfolio();
+    setShowResetModal(false);
+  }
 
   return (
     <div className="p-6 space-y-6">
-      <div>
-        <h2 className="text-base font-semibold text-slate-200 mb-0.5">Portfolio</h2>
-        <p className="text-sm text-slate-500">
-          Manage collateral and borrow positions. Changes update risk metrics immediately.
-        </p>
+      {showResetModal && (
+        <ConfirmResetModal
+          onConfirm={handleResetConfirm}
+          onCancel={() => setShowResetModal(false)}
+        />
+      )}
+      <div className="flex items-start justify-between">
+        <div>
+          <h2 className="text-base font-semibold text-slate-200 mb-0.5">Portfolio</h2>
+          <p className="text-sm text-slate-500">
+            Manage collateral and borrow positions. Changes update risk metrics immediately.
+          </p>
+        </div>
+        <button
+          onClick={() => setShowResetModal(true)}
+          className="shrink-0 ml-4 px-3 py-1.5 text-xs text-slate-400 hover:text-slate-200 bg-slate-800/60 hover:bg-slate-700/60 border border-slate-700/50 rounded transition-colors"
+        >
+          Reset to demo
+        </button>
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
@@ -184,6 +205,39 @@ export function Portfolio() {
         <p className="text-xs text-slate-600 mt-3">
           Adjust prices to model different market conditions. Changes are reflected immediately.
         </p>
+      </div>
+    </div>
+  );
+}
+
+function ConfirmResetModal({
+  onConfirm,
+  onCancel,
+}: {
+  onConfirm: () => void;
+  onCancel: () => void;
+}) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+      <div className="bg-slate-800 border border-slate-700 rounded-lg p-6 w-full max-w-sm shadow-xl">
+        <h3 className="text-sm font-semibold text-slate-200 mb-2">Reset to demo portfolio?</h3>
+        <p className="text-sm text-slate-400 mb-5">
+          This will discard your current positions and prices and restore the default demo values.
+        </p>
+        <div className="flex justify-end gap-2">
+          <button
+            onClick={onCancel}
+            className="px-4 py-1.5 text-sm text-slate-400 hover:text-slate-200 bg-slate-700/50 hover:bg-slate-700 border border-slate-600 rounded transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={onConfirm}
+            className="px-4 py-1.5 text-sm text-slate-200 bg-slate-700 hover:bg-slate-600 border border-slate-600 rounded transition-colors"
+          >
+            Confirm
+          </button>
+        </div>
       </div>
     </div>
   );

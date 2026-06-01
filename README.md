@@ -2,7 +2,9 @@
 
 A banking-inspired risk dashboard for analysing overcollateralised crypto lending positions.
 
-**Live demo:** [link coming soon]
+**Live demo:** https://defi-lending-risk-simulator.vercel.app
+
+*Note: the backend runs on Render's free tier and may take ~30–50s to wake on the first request after a period of inactivity.*
 
 ![Dashboard](docs/screenshot-dashboard.png)
 ![Stress Test](docs/screenshot-stresstest.png)

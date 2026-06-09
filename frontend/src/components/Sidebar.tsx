@@ -28,7 +28,7 @@ export function Sidebar({ currentView, onNavigate }: Props) {
   const hfLabel = healthFactorLabel(hf);
 
   return (
-    <aside className="w-64 min-h-screen bg-slate-900 border-r border-slate-700/60 flex flex-col shrink-0">
+    <aside className="w-full lg:w-64 lg:min-h-screen bg-slate-900 border-b lg:border-b-0 lg:border-r border-slate-700/60 flex flex-col shrink-0">
       {/* Title */}
       <div className="px-5 py-6 border-b border-slate-700/60">
         <div className="text-xs font-semibold tracking-widest text-slate-500 uppercase mb-1">

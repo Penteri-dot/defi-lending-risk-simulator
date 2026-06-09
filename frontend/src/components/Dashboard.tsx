@@ -88,7 +88,7 @@ export function Dashboard() {
         </div>
 
         {/* Summary cards */}
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <SummaryCard
             label="Total Collateral"
             value={formatUSD(riskData?.total_collateral_value ?? null)}
@@ -125,7 +125,8 @@ export function Dashboard() {
           <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">
             Asset Parameters
           </div>
-          <table className="w-full text-sm">
+          <div className="overflow-x-auto">
+          <table className="w-full text-sm min-w-[26rem]">
             <thead>
               <tr className="border-b border-slate-700/50">
                 {["Asset", "Value", "Share", "Max LTV", "Liq. Threshold"].map((h) => (
@@ -148,6 +149,7 @@ export function Dashboard() {
               })}
             </tbody>
           </table>
+          </div>
         </div>
       </div>
     </div>

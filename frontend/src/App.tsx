@@ -11,7 +11,7 @@ function AppContent() {
   const [view, setView] = useState<View>("dashboard");
 
   return (
-    <div className="flex min-h-screen bg-slate-950">
+    <div className="flex flex-col lg:flex-row min-h-screen bg-slate-950">
       <Sidebar currentView={view} onNavigate={setView} />
       <main className="flex-1 overflow-y-auto">
         {view === "dashboard" && <Dashboard />}

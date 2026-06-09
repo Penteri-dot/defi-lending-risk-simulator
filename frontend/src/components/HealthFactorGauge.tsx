@@ -54,7 +54,7 @@ export function HealthFactorGauge({ value, size = 260 }: Props) {
       : "#f87171";
 
   return (
-    <svg width={size} height={size * 0.72} viewBox={`0 0 ${size} ${size * 0.72}`}>
+    <svg width={size} height={size * 0.72} viewBox={`0 0 ${size} ${size * 0.72}`} className="max-w-full h-auto">
       {/* Track — full arc background */}
       <path
         d={describeArc(cx, cy, r, trackStart, trackEnd)}

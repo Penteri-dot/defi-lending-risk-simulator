@@ -64,6 +64,14 @@ def _validate_portfolio(portfolio: PortfolioRequest) -> None:
                 code="MISSING_PRICE",
             )
 
+    # Non-positive prices
+    for asset, price in portfolio.prices.items():
+        if price <= 0:
+            raise RiskEngineError(
+                f"Price for '{asset}' must be positive.",
+                code="INVALID_PRICE",
+            )
+
     # Borrows without any collateral
     if portfolio.borrows and not portfolio.collateral:
         raise RiskEngineError(
@@ -109,6 +117,14 @@ def stress_test(request: StressTestRequest) -> StressTestResponse:
     in the shocks dict keep their original prices. The original portfolio is
     never mutated.
     """
+    # Validate shocks before portfolio — fail fast on obviously bad input
+    for asset, shock in request.shocks.items():
+        if shock < -1.0:
+            raise RiskEngineError(
+                f"Shock for '{asset}' cannot be less than -1.0 (a 100% drop).",
+                code="INVALID_SHOCK",
+            )
+
     _validate_portfolio(request.portfolio)
     collateral, borrows, prices = _portfolio_to_dicts(request.portfolio)
     result = run_stress_test(collateral, borrows, prices, dict(request.shocks))

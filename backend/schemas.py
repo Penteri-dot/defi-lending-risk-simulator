@@ -2,7 +2,7 @@
 Pydantic v2 request and response schemas for the DeFi Lending Risk Simulator API.
 """
 
-from pydantic import BaseModel, field_validator, model_validator
+from pydantic import BaseModel, Field
 
 
 class CollateralPosition(BaseModel):
@@ -16,14 +16,14 @@ class BorrowPosition(BaseModel):
 
 
 class PortfolioRequest(BaseModel):
-    collateral: list[CollateralPosition]
-    borrows: list[BorrowPosition]
-    prices: dict[str, float]
+    collateral: list[CollateralPosition] = Field(max_length=50)
+    borrows: list[BorrowPosition] = Field(max_length=50)
+    prices: dict[str, float] = Field(max_length=50)
 
 
 class StressTestRequest(BaseModel):
     portfolio: PortfolioRequest
-    shocks: dict[str, float]
+    shocks: dict[str, float] = Field(max_length=50)
 
 
 # ── Response schemas ──────────────────────────────────────────────────────────

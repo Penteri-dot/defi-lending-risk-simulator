@@ -78,15 +78,15 @@ def test_max_borrow_single_asset():
 
 
 def test_max_borrow_mixed_assets():
-    # BTC: 0.5 * 100000 * 0.70 = 35000
-    # ETH: 10  *   4000 * 0.80 = 32000
-    # Total = 67000
+    # BTC: 0.5 * 100000 * 0.70  = 35000
+    # ETH: 10  *   4000 * 0.805 = 32200
+    # Total = 67200
     collateral = [
         {"asset": "BTC", "amount": 0.5},
         {"asset": "ETH", "amount": 10},
     ]
     prices = {"BTC": 100_000, "ETH": 4_000}
-    assert max_borrow_capacity(collateral, prices) == pytest.approx(67_000.0)
+    assert max_borrow_capacity(collateral, prices) == pytest.approx(67_200.0)
 
 
 # ── available_borrow ──────────────────────────────────────────────────────────
@@ -97,14 +97,14 @@ def test_available_borrow():
         {"asset": "ETH", "amount": 10},
     ]
     prices = {"BTC": 100_000, "ETH": 4_000}
-    # max_borrow = 67000, borrowed = 50000 → available = 17000
+    # max_borrow = 67200, borrowed = 50000 → available = 17200
     result = available_borrow(collateral, prices, borrowed_value=50_000)
-    assert result == pytest.approx(17_000.0)
+    assert result == pytest.approx(17_200.0)
 
 
 def test_available_borrow_negative_when_over_limit():
     collateral = [{"asset": "ETH", "amount": 1}]
     prices = {"ETH": 4_000}
-    # max = 4000 * 0.80 = 3200; borrowed = 3500 → available = -300
+    # max = 4000 * 0.805 = 3220; borrowed = 3500 → available = -280
     result = available_borrow(collateral, prices, borrowed_value=3_500)
-    assert result == pytest.approx(-300.0)
+    assert result == pytest.approx(-280.0)

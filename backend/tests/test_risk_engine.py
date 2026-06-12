@@ -10,22 +10,23 @@ from backend.core.risk_engine import health_factor
 
 def test_health_factor_single_btc():
     # 1 BTC at 100000, borrow 60000 USDC
-    # (1 * 100000 * 0.75) / 60000 = 75000 / 60000 = 1.25
+    # (1 * 100000 * 0.77) / 60000 = 77000 / 60000 = 1.28333...
     collateral = [{"asset": "BTC", "amount": 1}]
     prices = {"BTC": 100_000}
     hf = health_factor(collateral, prices, borrowed_value=60_000)
-    assert hf == pytest.approx(1.25)
+    assert hf == pytest.approx(77_000 / 60_000)
 
 
 def test_health_factor_mixed_btc_eth():
     """
-    Manual verification of the canonical example from the spec:
+    Manual verification of the canonical example from the spec
+    (Aave V3 Ethereum Core liquidation thresholds: BTC 77%, ETH 83%):
         Collateral: 0.5 BTC at 100000, 10 ETH at 4000
         Borrow: 50000 USDC
-        Expected: (0.5 * 100000 * 0.75 + 10 * 4000 * 0.825) / 50000
-                = (37500 + 33000) / 50000
-                = 70500 / 50000
-                = 1.41
+        Expected: (0.5 * 100000 * 0.77 + 10 * 4000 * 0.83) / 50000
+                = (38500 + 33200) / 50000
+                = 71700 / 50000
+                = 1.434
     """
     collateral = [
         {"asset": "BTC", "amount": 0.5},
@@ -33,7 +34,7 @@ def test_health_factor_mixed_btc_eth():
     ]
     prices = {"BTC": 100_000, "ETH": 4_000}
     hf = health_factor(collateral, prices, borrowed_value=50_000)
-    assert hf == pytest.approx(1.41)
+    assert hf == pytest.approx(1.434)
 
 
 def test_health_factor_no_borrows_returns_none():

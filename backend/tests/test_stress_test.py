@@ -35,21 +35,21 @@ def test_stress_test_does_not_mutate_portfolio():
 
 def test_stress_test_btc_minus30_eth_minus40():
     """
-    Spec-defined verification:
+    Spec-defined verification (LTs: BTC 77%, ETH 83%):
         BTC -30%: stressed price = 70000
         ETH -40%: stressed price = 2400
         Stressed collateral = 0.5*70000 + 10*2400 = 35000 + 24000 = 59000
-        Stressed HF = (0.5*70000*0.75 + 10*2400*0.825) / 50000
-                    = (26250 + 19800) / 50000
-                    = 46050 / 50000
-                    = 0.921
-        Original HF = 1.41 → not liquidatable
-        Stressed HF = 0.921 → liquidatable → liquidation_triggered = True
+        Stressed HF = (0.5*70000*0.77 + 10*2400*0.83) / 50000
+                    = (26950 + 19920) / 50000
+                    = 46870 / 50000
+                    = 0.9374
+        Original HF = 1.434 → not liquidatable
+        Stressed HF = 0.9374 → liquidatable → liquidation_triggered = True
     """
     result = run_stress_test(COLLATERAL, BORROWS, PRICES, {"BTC": -0.3, "ETH": -0.4})
 
-    assert result["original_health_factor"] == pytest.approx(1.41)
-    assert result["stressed_health_factor"] == pytest.approx(0.921)
+    assert result["original_health_factor"] == pytest.approx(1.434)
+    assert result["stressed_health_factor"] == pytest.approx(0.9374)
     assert result["original_is_liquidatable"] is False
     assert result["stressed_is_liquidatable"] is True
     assert result["liquidation_triggered"] is True
@@ -88,9 +88,9 @@ def test_stress_test_unshocked_asset_unchanged():
         {"BTC": 100_000, "USDC": 1},
         shocks={"USDC": 0.0},   # explicit no-op shock on USDC, BTC untouched
     )
-    # BTC keeps 100000; HF = (1*100000*0.75)/40000 = 1.875
-    assert result["stressed_health_factor"] == pytest.approx(1.875)
-    assert result["original_health_factor"] == pytest.approx(1.875)
+    # BTC keeps 100000; HF = (1*100000*0.77)/40000 = 1.925
+    assert result["stressed_health_factor"] == pytest.approx(1.925)
+    assert result["original_health_factor"] == pytest.approx(1.925)
 
 
 def test_stress_test_only_eth_shocked_btc_stable():
@@ -101,10 +101,10 @@ def test_stress_test_only_eth_shocked_btc_stable():
         PRICES,
         shocks={"ETH": -0.5},
     )
-    # BTC contribution to stressed HF: 0.5 * 100000 * 0.75 = 37500 (unchanged)
-    # ETH contribution: 10 * 2000 * 0.825 = 16500
-    # Stressed HF = (37500 + 16500) / 50000 = 54000/50000 = 1.08
-    assert result["stressed_health_factor"] == pytest.approx(1.08)
+    # BTC contribution to stressed HF: 0.5 * 100000 * 0.77 = 38500 (unchanged)
+    # ETH contribution: 10 * 2000 * 0.83 = 16600
+    # Stressed HF = (38500 + 16600) / 50000 = 55100/50000 = 1.102
+    assert result["stressed_health_factor"] == pytest.approx(1.102)
 
 
 # ── Applied shocks echoed back ────────────────────────────────────────────────

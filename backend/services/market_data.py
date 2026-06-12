@@ -55,6 +55,21 @@ def _get_json(url: str, params: dict | None = None):
 
 # ── Pure parsers (unit-tested without network) ────────────────────────────────
 
+USDC_PEG_BAND = 0.005
+
+
+def normalize_stablecoin_peg(price: float, band: float = USDC_PEG_BAND) -> float:
+    """
+    Snap a stablecoin price to exactly 1.00 inside a small band.
+
+    USDC is quoted via USDC-USDT, a USD *proxy*: deviations of a few basis
+    points are mostly noise on the USDT leg, and reporting them as USD
+    deviations would be spurious precision. Snapping inside ±0.5% gives a
+    clean $1.00 baseline for stress testing. A genuine depeg (beyond the
+    band, like March 2023's $0.91) passes through untouched.
+    """
+    return 1.0 if abs(price - 1.0) <= band else price
+
 
 def parse_coinbase_ticker(payload: dict) -> float:
     """Extract the last trade price from a Coinbase ticker payload."""
@@ -145,8 +160,10 @@ def fetch_spot_prices() -> dict:
     def _fetch() -> dict:
         btc = parse_coinbase_ticker(_get_json(f"{COINBASE_BASE}/products/BTC-USD/ticker"))
         eth = parse_coinbase_ticker(_get_json(f"{COINBASE_BASE}/products/ETH-USD/ticker"))
-        usdc = parse_okx_ticker(
-            _get_json(f"{OKX_BASE}/api/v5/market/ticker", {"instId": "USDC-USDT"})
+        usdc = normalize_stablecoin_peg(
+            parse_okx_ticker(
+                _get_json(f"{OKX_BASE}/api/v5/market/ticker", {"instId": "USDC-USDT"})
+            )
         )
         return {
             "prices": {"BTC": btc, "ETH": eth, "USDC": usdc},
@@ -154,7 +171,7 @@ def fetch_spot_prices() -> dict:
             "sources": {
                 "BTC": "Coinbase BTC-USD",
                 "ETH": "Coinbase ETH-USD",
-                "USDC": "OKX USDC-USDT (USDT as USD proxy)",
+                "USDC": "OKX USDC-USDT (snapped to $1.00 within ±0.5%)",
             },
         }
 

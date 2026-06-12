@@ -10,11 +10,30 @@ import pytest
 from backend.exceptions import MarketDataError
 from backend.services.market_data import (
     build_joint_returns,
+    normalize_stablecoin_peg,
     parse_coinbase_daily_closes,
     parse_coinbase_ticker,
     parse_okx_daily_closes,
     parse_okx_ticker,
 )
+
+
+# ── Stablecoin peg normalisation ─────────────────────────────────────────────
+
+def test_peg_noise_snaps_to_one():
+    assert normalize_stablecoin_peg(1.0011) == 1.0
+    assert normalize_stablecoin_peg(0.9962) == 1.0
+    assert normalize_stablecoin_peg(1.0) == 1.0
+
+
+def test_genuine_depeg_passes_through():
+    assert normalize_stablecoin_peg(0.9139) == 0.9139
+    assert normalize_stablecoin_peg(1.02) == 1.02
+
+
+def test_peg_band_boundary():
+    assert normalize_stablecoin_peg(1.005) == 1.0   # inclusive edge
+    assert normalize_stablecoin_peg(1.0051) == 1.0051
 
 
 # ── Tickers ───────────────────────────────────────────────────────────────────

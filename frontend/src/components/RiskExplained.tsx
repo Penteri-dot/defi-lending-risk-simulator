@@ -8,7 +8,9 @@ export function RiskExplained() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
+      {/* CSS columns instead of grid: boxes pack tightly under each other
+          regardless of the neighbouring column's height */}
+      <div className="columns-1 lg:columns-2 gap-5">
       <Concept title="Loan-to-Value (LTV)">
         <p>
           LTV is the ratio of outstanding debt to the market value of collateral:{" "}
@@ -111,7 +113,7 @@ export function RiskExplained() {
 
 function Concept({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="bg-slate-800/40 border border-slate-700/40 rounded-lg p-5">
+    <div className="bg-slate-800/40 border border-slate-700/40 rounded-lg p-5 break-inside-avoid mb-5">
       <h3 className="text-sm font-semibold text-slate-200 mb-3">{title}</h3>
       <div className="text-sm text-slate-400 leading-relaxed">{children}</div>
     </div>

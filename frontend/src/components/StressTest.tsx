@@ -16,9 +16,12 @@ const SHOCK_RANGES: Record<AssetSymbol, { min: number; max: number; step: number
   USDC: { min: -0.1, max: 0.05, step: 0.005 },
 };
 
+// A moderate, plausible default: BTC −8%, ETH −16% (roughly 2× beta), USDC
+// unmoved. Extreme moves — including a stablecoin depeg — are available on
+// the sliders and as named events in Historical Scenarios.
 const DEFAULT_SHOCKS: Record<AssetSymbol, number> = {
-  BTC: -0.3,
-  ETH: -0.4,
+  BTC: -0.08,
+  ETH: -0.16,
   USDC: 0,
 };
 

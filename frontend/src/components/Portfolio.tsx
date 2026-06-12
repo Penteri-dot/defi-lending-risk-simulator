@@ -13,11 +13,13 @@ import { formatUSD, formatPercent } from "../utils/formatting";
 function AddPositionForm({
   onAdd,
   label,
+  assets = SUPPORTED_ASSETS,
 }: {
   onAdd: (pos: Position) => void;
   label: string;
+  assets?: AssetSymbol[];
 }) {
-  const [asset, setAsset] = useState<AssetSymbol>("BTC");
+  const [asset, setAsset] = useState<AssetSymbol>(assets[0]);
   const [amount, setAmount] = useState("");
   const [err, setErr] = useState("");
 
@@ -42,7 +44,7 @@ function AddPositionForm({
           onChange={(e) => setAsset(e.target.value as AssetSymbol)}
           className="bg-slate-800 border border-slate-600 rounded px-2 py-1.5 text-sm text-slate-200 focus:outline-none focus:border-slate-400"
         >
-          {SUPPORTED_ASSETS.map((a) => (
+          {assets.map((a) => (
             <option key={a} value={a}>{a}</option>
           ))}
         </select>
@@ -207,22 +209,26 @@ export function Portfolio() {
               </tbody>
             </table>
           )}
-          <AddPositionForm onAdd={addBorrow} label="Borrow" />
+          <AddPositionForm
+            onAdd={addBorrow}
+            label="Borrow"
+            assets={["USDC", "BTC", "ETH"]}
+          />
         </Panel>
       </div>
 
       {/* Market prices */}
       <div className="bg-slate-800/60 border border-slate-700/50 rounded-lg p-5">
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-3 mb-4">
           <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
             Market Prices (USD)
           </div>
           <button
             onClick={handleUseLivePrices}
             disabled={liveStatus.kind === "loading"}
-            className="px-3 py-1.5 text-xs text-slate-300 hover:text-slate-100 bg-slate-700/60 hover:bg-slate-600/60 border border-slate-600/60 rounded transition-colors disabled:opacity-50"
+            className="px-3 py-1.5 text-xs text-slate-200 hover:text-white bg-sky-900/50 hover:bg-sky-800/50 border border-sky-700/50 rounded transition-colors disabled:opacity-50"
           >
-            {liveStatus.kind === "loading" ? "Fetching…" : "Use live prices"}
+            {liveStatus.kind === "loading" ? "Fetching…" : "↻ Use live prices"}
           </button>
         </div>
         <div className="flex flex-wrap gap-4">

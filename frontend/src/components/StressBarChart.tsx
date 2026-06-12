@@ -39,6 +39,7 @@ export function StressBarChart({ result }: Props) {
           tickLine={false}
         />
         <Tooltip
+          cursor={{ fill: "rgba(148, 163, 184, 0.08)" }}
           contentStyle={{
             background: "#1e293b",
             border: "1px solid #334155",

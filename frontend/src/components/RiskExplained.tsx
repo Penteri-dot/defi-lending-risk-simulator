@@ -1,6 +1,6 @@
 export function RiskExplained() {
   return (
-    <div className="p-6 max-w-2xl space-y-6">
+    <div className="p-6 max-w-6xl space-y-6">
       <div>
         <h2 className="text-base font-semibold text-slate-200 mb-0.5">Risk Explained</h2>
         <p className="text-sm text-slate-500">
@@ -8,6 +8,7 @@ export function RiskExplained() {
         </p>
       </div>
 
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
       <Concept title="Loan-to-Value (LTV)">
         <p>
           LTV is the ratio of outstanding debt to the market value of collateral:{" "}
@@ -103,6 +104,7 @@ export function RiskExplained() {
           thinking that applies to currency mismatches in traditional banking.
         </p>
       </Concept>
+      </div>
     </div>
   );
 }

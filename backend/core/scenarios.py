@@ -74,6 +74,18 @@ SCENARIOS: dict[str, ScenarioMeta] = {
         ),
         filename="ftx_collapse_2022.csv",
     ),
+    "liberation_day_2025": ScenarioMeta(
+        id="liberation_day_2025",
+        name="Liberation Day tariffs (April 2025)",
+        window="2025-04-01 → 2025-04-12",
+        description=(
+            "The 2 April 2025 'Liberation Day' tariff announcement set off a "
+            "global risk-off. ETH fell 23% peak-to-trough in a week while BTC "
+            "fell 11% — the same macro shock, very different damage per asset. "
+            "The 9 April tariff pause snapped prices back almost as fast."
+        ),
+        filename="liberation_day_2025.csv",
+    ),
     "usdc_depeg_2023": ScenarioMeta(
         id="usdc_depeg_2023",
         name="USDC depeg (March 2023)",

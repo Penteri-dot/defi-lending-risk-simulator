@@ -15,9 +15,10 @@ PRICES = {"BTC": 100_000, "ETH": 4_000, "USDC": 1}
 
 # ── Registry & data loading ───────────────────────────────────────────────────
 
-def test_registry_contains_five_scenarios():
-    assert len(SCENARIOS) == 5
+def test_registry_contains_six_scenarios():
+    assert len(SCENARIOS) == 6
     assert "covid_crash_2020" in SCENARIOS
+    assert "liberation_day_2025" in SCENARIOS
     assert "usdc_depeg_2023" in SCENARIOS
 
 

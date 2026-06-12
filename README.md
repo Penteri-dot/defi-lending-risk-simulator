@@ -27,7 +27,7 @@ The V2 release pushes past point estimates: instead of only asking *"what if BTC
 - **Real Aave V3 risk parameters** — LTV and liquidation thresholds mirror the Aave V3 Ethereum Core market as a dated, sourced snapshot (see Risk model below)
 - **Live market prices** — one click pulls spot prices from public exchange APIs (Coinbase, OKX); no API keys anywhere
 - **Stress testing** — apply per-asset price shocks and see the impact on health factor, collateral value, and liquidation status
-- **Historical scenario replay** — your position structure, replayed through five real crisis windows with actual daily closes: COVID crash (3/2020), May 2021 selloff, Celsius/3AC (6/2022), FTX collapse (11/2022), USDC depeg (3/2023). Day-by-day health factor path, first liquidation date, max drawdown
+- **Historical scenario replay** — your position structure, replayed through six real crisis windows with actual daily closes: COVID crash (3/2020), May 2021 selloff, Celsius/3AC (6/2022), FTX collapse (11/2022), USDC depeg (3/2023), Liberation Day tariffs (4/2025). Day-by-day health factor path, first liquidation date, max drawdown
 - **Liquidation probability** — joint bootstrap Monte Carlo over ~300 days of actual returns: P(liquidation within 7/30/90 days), ending-HF percentiles, 95% VaR — with an explicit *model limitations* panel
 - **Risk Explained** — plain-English reference covering LTV, health factor, liquidation thresholds, and why stress testing matters
 

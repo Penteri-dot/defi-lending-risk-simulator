@@ -34,8 +34,12 @@ def test_list_scenarios():
     resp = client.get("/scenarios")
     assert resp.status_code == 200
     scenarios = resp.json()["scenarios"]
-    assert len(scenarios) == 5
-    assert {s["id"] for s in scenarios} >= {"covid_crash_2020", "ftx_collapse_2022"}
+    assert len(scenarios) == 6
+    assert {s["id"] for s in scenarios} >= {
+        "covid_crash_2020",
+        "ftx_collapse_2022",
+        "liberation_day_2025",
+    }
 
 
 # ── POST /scenarios/{id}/replay ──────────────────────────────────────────────

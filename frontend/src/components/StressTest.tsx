@@ -10,10 +10,14 @@ import {
   healthFactorColor,
 } from "../utils/formatting";
 
+// All sliders share one symmetric scale so 0% sits dead centre on every row
+// and equal shocks line up vertically — positions are directly comparable.
+// USDC keeps a finer step for sub-percent depeg moves. Crashes beyond -50%
+// live in Historical Scenarios.
 const SHOCK_RANGES: Record<AssetSymbol, { min: number; max: number; step: number }> = {
-  BTC: { min: -0.8, max: 0.2, step: 0.01 },
-  ETH: { min: -0.8, max: 0.2, step: 0.01 },
-  USDC: { min: -0.1, max: 0.05, step: 0.005 },
+  BTC: { min: -0.5, max: 0.5, step: 0.01 },
+  ETH: { min: -0.5, max: 0.5, step: 0.01 },
+  USDC: { min: -0.5, max: 0.5, step: 0.005 },
 };
 
 // A moderate, plausible default: BTC −8%, ETH −16% (roughly 2× beta), USDC
@@ -95,7 +99,7 @@ export function StressTest() {
       <div className="bg-slate-800/60 border border-slate-700/50 rounded-lg p-5 space-y-5">
         <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Price Shocks</div>
         {assetsInUse.map((asset) => {
-          const range = SHOCK_RANGES[asset] ?? { min: -0.8, max: 0.2, step: 0.01 };
+          const range = SHOCK_RANGES[asset] ?? { min: -0.5, max: 0.5, step: 0.01 };
           const shock = shocks[asset] ?? 0;
           const origPrice = portfolio.prices[asset] ?? 0;
           const stressedPrice = origPrice * (1 + shock);

@@ -44,7 +44,9 @@ def _get_json(url: str, params: dict | None = None):
         response = httpx.get(url, params=params, timeout=_TIMEOUT)
         response.raise_for_status()
         return response.json()
-    except httpx.HTTPError as exc:
+    except MarketDataError:
+        raise
+    except Exception as exc:  # network, TLS, proxy, JSON — all map to 503
         raise MarketDataError(
             f"Upstream market data request failed: {exc}",
             code="MARKET_DATA_UNAVAILABLE",

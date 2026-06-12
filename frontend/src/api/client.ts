@@ -1,7 +1,11 @@
 import axios from "axios";
 import type {
+  LiquidationProbabilityResponse,
+  MarketPricesResponse,
   PortfolioPayload,
   RiskCalculationResponse,
+  ScenarioInfo,
+  ScenarioReplayResponse,
   StressTestPayload,
   StressTestResponse,
 } from "../types";
@@ -35,6 +39,55 @@ export async function runStressTest(
 ): Promise<ApiCallResult<StressTestResponse>> {
   try {
     const res = await http.post<StressTestResponse>("/risk/stress-test", payload);
+    return { data: res.data };
+  } catch (err) {
+    return extractError(err);
+  }
+}
+
+export async function getMarketPrices(): Promise<ApiCallResult<MarketPricesResponse>> {
+  try {
+    const res = await http.get<MarketPricesResponse>("/market/prices");
+    return { data: res.data };
+  } catch (err) {
+    return extractError(err);
+  }
+}
+
+export async function listScenarios(): Promise<ApiCallResult<{ scenarios: ScenarioInfo[] }>> {
+  try {
+    const res = await http.get<{ scenarios: ScenarioInfo[] }>("/scenarios");
+    return { data: res.data };
+  } catch (err) {
+    return extractError(err);
+  }
+}
+
+export async function replayScenario(
+  scenarioId: string,
+  payload: PortfolioPayload
+): Promise<ApiCallResult<ScenarioReplayResponse>> {
+  try {
+    const res = await http.post<ScenarioReplayResponse>(
+      `/scenarios/${scenarioId}/replay`,
+      payload
+    );
+    return { data: res.data };
+  } catch (err) {
+    return extractError(err);
+  }
+}
+
+export async function getLiquidationProbability(
+  payload: PortfolioPayload,
+  horizonDays: number
+): Promise<ApiCallResult<LiquidationProbabilityResponse>> {
+  try {
+    const res = await http.post<LiquidationProbabilityResponse>(
+      "/risk/liquidation-probability",
+      { portfolio: payload, horizon_days: horizonDays },
+      { timeout: 30000 }
+    );
     return { data: res.data };
   } catch (err) {
     return extractError(err);

@@ -4,6 +4,8 @@ import { Sidebar } from "./components/Sidebar";
 import { Dashboard } from "./components/Dashboard";
 import { Portfolio } from "./components/Portfolio";
 import { StressTest } from "./components/StressTest";
+import { Scenarios } from "./components/Scenarios";
+import { LiquidationRisk } from "./components/LiquidationRisk";
 import { RiskExplained } from "./components/RiskExplained";
 import type { View } from "./types";
 
@@ -17,6 +19,8 @@ function AppContent() {
         {view === "dashboard" && <Dashboard />}
         {view === "portfolio" && <Portfolio />}
         {view === "stresstest" && <StressTest />}
+        {view === "scenarios" && <Scenarios />}
+        {view === "probability" && <LiquidationRisk />}
         {view === "explained" && <RiskExplained />}
       </main>
     </div>

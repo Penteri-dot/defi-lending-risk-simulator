@@ -1,6 +1,12 @@
 import { useState } from "react";
 import { usePortfolio } from "../context/PortfolioContext";
-import { ASSET_CONFIG, DEFAULT_PRICES, SUPPORTED_ASSETS } from "../constants";
+import { getMarketPrices } from "../api/client";
+import {
+  ASSET_CONFIG,
+  DEFAULT_PRICES,
+  PARAMETER_SNAPSHOT,
+  SUPPORTED_ASSETS,
+} from "../constants";
 import type { AssetSymbol, Position } from "../types";
 import { formatUSD, formatPercent } from "../utils/formatting";
 
@@ -72,15 +78,33 @@ export function Portfolio() {
     addBorrow,
     removeBorrow,
     updatePrice,
+    setPrices,
     resetPortfolio,
   } = usePortfolio();
 
   const [showResetModal, setShowResetModal] = useState(false);
+  const [liveStatus, setLiveStatus] = useState<
+    { kind: "idle" } | { kind: "loading" } | { kind: "ok"; asOf: string } | { kind: "error"; message: string }
+  >({ kind: "idle" });
   const { collateral, borrows, prices } = portfolio;
 
   function handleResetConfirm() {
     resetPortfolio();
     setShowResetModal(false);
+  }
+
+  async function handleUseLivePrices() {
+    setLiveStatus({ kind: "loading" });
+    const result = await getMarketPrices();
+    if (result.data) {
+      setPrices(result.data.prices as Record<AssetSymbol, number>);
+      setLiveStatus({ kind: "ok", asOf: result.data.as_of });
+    } else {
+      setLiveStatus({
+        kind: "error",
+        message: result.error ?? "Could not fetch live prices.",
+      });
+    }
   }
 
   return (
@@ -189,8 +213,17 @@ export function Portfolio() {
 
       {/* Market prices */}
       <div className="bg-slate-800/60 border border-slate-700/50 rounded-lg p-5">
-        <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">
-          Market Prices (USD)
+        <div className="flex items-center justify-between mb-4">
+          <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            Market Prices (USD)
+          </div>
+          <button
+            onClick={handleUseLivePrices}
+            disabled={liveStatus.kind === "loading"}
+            className="px-3 py-1.5 text-xs text-slate-300 hover:text-slate-100 bg-slate-700/60 hover:bg-slate-600/60 border border-slate-600/60 rounded transition-colors disabled:opacity-50"
+          >
+            {liveStatus.kind === "loading" ? "Fetching…" : "Use live prices"}
+          </button>
         </div>
         <div className="flex flex-wrap gap-4">
           {SUPPORTED_ASSETS.map((asset) => (
@@ -202,10 +235,28 @@ export function Portfolio() {
             />
           ))}
         </div>
+        {liveStatus.kind === "ok" && (
+          <p className="text-xs text-emerald-500/80 mt-3">
+            Live prices applied (Coinbase BTC/ETH, OKX USDC) ·{" "}
+            {new Date(liveStatus.asOf).toLocaleTimeString()}
+          </p>
+        )}
+        {liveStatus.kind === "error" && (
+          <p className="text-xs text-red-400 mt-3">{liveStatus.message}</p>
+        )}
         <p className="text-xs text-slate-600 mt-3">
-          Adjust prices to model different market conditions. Changes are reflected immediately.
+          Adjust prices manually or pull live spot prices. Changes are reflected immediately.
         </p>
       </div>
+
+      {/* Parameter provenance */}
+      <p className="text-xs text-slate-600">
+        Risk parameters (Max LTV, liquidation threshold) mirror the{" "}
+        {PARAMETER_SNAPSHOT.market} market (BTC→WBTC, ETH→WETH), verified{" "}
+        {PARAMETER_SNAPSHOT.verified} against Aave governance sources. On-chain
+        parameters change via governance — check the live protocol before
+        relying on them.
+      </p>
     </div>
   );
 }

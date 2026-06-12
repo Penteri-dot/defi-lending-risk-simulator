@@ -59,6 +59,7 @@ interface PortfolioContextValue {
   addBorrow: (pos: Position) => void;
   removeBorrow: (index: number) => void;
   updatePrice: (asset: AssetSymbol, price: number) => void;
+  setPrices: (prices: Record<AssetSymbol, number>) => void;
   resetPortfolio: () => void;
 }
 
@@ -141,6 +142,13 @@ export function PortfolioProvider({ children }: { children: React.ReactNode }) {
     }));
   }, []);
 
+  const setPrices = useCallback((prices: Record<AssetSymbol, number>) => {
+    setPortfolio((prev) => ({
+      ...prev,
+      prices: { ...prev.prices, ...prices },
+    }));
+  }, []);
+
   const resetPortfolio = useCallback(() => {
     setPortfolio(DEFAULT_PORTFOLIO);
   }, []);
@@ -157,6 +165,7 @@ export function PortfolioProvider({ children }: { children: React.ReactNode }) {
         addBorrow,
         removeBorrow,
         updatePrice,
+        setPrices,
         resetPortfolio,
       }}
     >

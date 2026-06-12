@@ -64,6 +64,45 @@ export function RiskExplained() {
           downside scenarios without triggering forced liquidation.
         </p>
       </Concept>
+
+      <Concept title="Scenario Replay vs Hypothetical Shocks">
+        <p>
+          A hypothetical shock ("BTC −30%") is a single point estimate, and the number is
+          chosen by the analyst. Historical scenario replay removes that degree of freedom:
+          it uses the price path the market <em>actually</em> took — including the timing,
+          the cross-asset correlation, and the partial recoveries. A position can survive
+          a clean −30% shock yet still get liquidated mid-path when losses cluster on
+          consecutive days. Replaying named events (March 2020, FTX) is also how risk teams
+          communicate: "would we have survived FTX week?" is a sharper question than
+          "would we survive −25%?".
+        </p>
+      </Concept>
+
+      <Concept title="Liquidation Probability (Bootstrap Monte Carlo)">
+        <p>
+          Both shocks and replays are deterministic. The probabilistic question —{" "}
+          <em>how likely is liquidation within 30 days?</em> — needs a distribution of
+          future paths. This simulator uses a <strong className="text-slate-300">joint
+          historical bootstrap</strong>: it resamples whole days of actual returns (all
+          assets together, preserving their correlation) and walks the position through
+          thousands of simulated paths. No normality assumption, no estimated parameters —
+          the data speaks for itself, with the trade-off that the simulation can only
+          replay days it has seen. Every estimate ships with its limitations stated:
+          daily closes ignore intraday wicks, independent draws ignore volatility
+          clustering, and a calm sample window understates tail risk.
+        </p>
+      </Concept>
+
+      <Concept title="A Stablecoin Depeg Cuts Both Ways">
+        <p>
+          When USDC traded at $0.91 in March 2023, positions that had <em>borrowed</em>{" "}
+          USDC saw their debt shrink and their health factor improve. Positions that had
+          posted USDC <em>as collateral</em> were damaged. Whether a depeg helps or hurts
+          you depends entirely on which side of the balance sheet the stablecoin sits —
+          try both in the Historical Scenarios view. This is the same asset-liability
+          thinking that applies to currency mismatches in traditional banking.
+        </p>
+      </Concept>
     </div>
   );
 }

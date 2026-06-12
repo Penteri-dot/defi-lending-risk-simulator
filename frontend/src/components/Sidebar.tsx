@@ -12,6 +12,8 @@ const NAV_ITEMS: { view: View; label: string }[] = [
   { view: "dashboard", label: "Dashboard" },
   { view: "portfolio", label: "Portfolio" },
   { view: "stresstest", label: "Stress Test" },
+  { view: "scenarios", label: "Historical Scenarios" },
+  { view: "probability", label: "Liquidation Probability" },
   { view: "explained", label: "Risk Explained" },
 ];
 

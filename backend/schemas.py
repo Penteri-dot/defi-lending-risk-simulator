@@ -63,3 +63,70 @@ class StressTestResponse(BaseModel):
 class ErrorResponse(BaseModel):
     error: str
     code: str
+
+
+# ── V2: market data ───────────────────────────────────────────────────────────
+
+class MarketPricesResponse(BaseModel):
+    prices: dict[str, float]
+    as_of: str
+    sources: dict[str, str]
+
+
+# ── V2: scenario replay ───────────────────────────────────────────────────────
+
+class ScenarioInfo(BaseModel):
+    id: str
+    name: str
+    window: str
+    description: str
+
+
+class ScenarioListResponse(BaseModel):
+    scenarios: list[ScenarioInfo]
+
+
+class ScenarioDay(BaseModel):
+    date: str
+    prices: dict[str, float]
+    health_factor: float | None
+    total_collateral_value: float
+    total_borrowed_value: float
+    is_liquidatable: bool
+
+
+class ScenarioSummary(BaseModel):
+    starting_health_factor: float | None
+    ending_health_factor: float | None
+    min_health_factor: float | None
+    min_health_factor_date: str | None
+    first_liquidation_date: str | None
+    was_liquidated: bool
+    max_collateral_drawdown: float
+
+
+class ScenarioReplayResponse(BaseModel):
+    scenario_id: str
+    days: list[ScenarioDay]
+    summary: ScenarioSummary
+
+
+# ── V2: liquidation probability ───────────────────────────────────────────────
+
+class LiquidationProbabilityRequest(BaseModel):
+    portfolio: PortfolioRequest
+    horizon_days: int = Field(default=30, ge=1, le=365)
+    n_paths: int = Field(default=5000, ge=100, le=20000)
+
+
+class LiquidationProbabilityResponse(BaseModel):
+    starting_health_factor: float | None
+    probability_liquidation: float
+    probability_liquidation_at_horizon: float
+    ending_hf_p5: float | None
+    ending_hf_p50: float | None
+    ending_hf_p95: float | None
+    collateral_var_95: float
+    horizon_days: int
+    n_paths: int
+    sample_size: int

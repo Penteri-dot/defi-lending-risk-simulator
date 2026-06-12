@@ -9,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from backend.api.routes import router
-from backend.exceptions import RiskEngineError
+from backend.exceptions import MarketDataError, RiskEngineError
 
 app = FastAPI(
     title="DeFi Lending Risk Simulator",
@@ -18,7 +18,7 @@ app = FastAPI(
         "Applies traditional credit risk concepts (LTV, liquidation thresholds, "
         "stress testing) to DeFi-style portfolios."
     ),
-    version="0.1.0",
+    version="0.2.0",
 )
 
 # ── CORS ──────────────────────────────────────────────────────────────────────
@@ -46,6 +46,14 @@ app.add_middleware(
 async def risk_engine_error_handler(request: Request, exc: RiskEngineError) -> JSONResponse:
     return JSONResponse(
         status_code=422,
+        content={"error": exc.message, "code": exc.code},
+    )
+
+
+@app.exception_handler(MarketDataError)
+async def market_data_error_handler(request: Request, exc: MarketDataError) -> JSONResponse:
+    return JSONResponse(
+        status_code=503,
         content={"error": exc.message, "code": exc.code},
     )
 

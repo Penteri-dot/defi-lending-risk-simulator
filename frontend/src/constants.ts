@@ -23,9 +23,12 @@ export const PARAMETER_SNAPSHOT = {
 
 export const SUPPORTED_ASSETS: AssetSymbol[] = ["BTC", "ETH", "USDC"];
 
+// Round numbers near current market levels — kept realistic on purpose, and
+// chosen with the 27,000 USDC demo borrow so the demo HF lands at ~1.43:
+// a position that survives FTX week by ~3% but is liquidated in March 2020.
 export const DEFAULT_PRICES: Record<AssetSymbol, number> = {
-  BTC: 100000,
-  ETH: 4000,
+  BTC: 64000,
+  ETH: 1700,
   USDC: 1,
 };
 

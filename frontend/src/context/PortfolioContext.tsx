@@ -22,7 +22,7 @@ export const DEFAULT_PORTFOLIO: Portfolio = {
     { asset: "BTC", amount: 0.5 },
     { asset: "ETH", amount: 10 },
   ],
-  borrows: [{ asset: "USDC", amount: 30000 }],
+  borrows: [{ asset: "USDC", amount: 27000 }],
   prices: { ...DEFAULT_PRICES },
 };
 

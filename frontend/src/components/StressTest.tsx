@@ -157,6 +157,9 @@ function ShockSlider({
 }) {
   const pct = (shock * 100).toFixed(1);
   const isNeg = shock < 0;
+  // Ranges are asymmetric (e.g. -80%…+20%), so the 0% mark must sit at the
+  // slider's actual zero position, not at the visual centre of the track.
+  const zeroPos = ((0 - min) / (max - min)) * 100;
 
   return (
     <div className="space-y-1.5">
@@ -180,10 +183,15 @@ function ShockSlider({
         onChange={(e) => onChange(parseFloat(e.target.value))}
         className="w-full accent-slate-400 cursor-pointer"
       />
-      <div className="flex justify-between text-xs text-slate-600">
-        <span>{(min * 100).toFixed(0)}%</span>
-        <span>0%</span>
-        <span>+{(max * 100).toFixed(0)}%</span>
+      <div className="relative h-4 text-xs text-slate-600">
+        <span className="absolute left-0">{(min * 100).toFixed(0)}%</span>
+        <span
+          className="absolute"
+          style={{ left: `${zeroPos}%`, transform: "translateX(-50%)" }}
+        >
+          0%
+        </span>
+        <span className="absolute right-0">+{(max * 100).toFixed(0)}%</span>
       </div>
     </div>
   );

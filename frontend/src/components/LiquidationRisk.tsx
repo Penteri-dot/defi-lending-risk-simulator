@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { getLiquidationProbability } from "../api/client";
-import { usePortfolio } from "../context/PortfolioContext";
+import { usePortfolio } from "../context/usePortfolio";
 import type { LiquidationProbabilityResponse } from "../types";
 import {
   formatHealthFactor,

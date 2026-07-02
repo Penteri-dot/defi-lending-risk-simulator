@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { usePortfolio } from "../context/PortfolioContext";
+import { usePortfolio } from "../context/usePortfolio";
 import { getMarketPrices } from "../api/client";
 import {
   ASSET_CONFIG,

@@ -26,3 +26,6 @@ frontend/.env.local
 
 # macOS
 .DS_Store
+
+# Local drafts (not for the repo)
+linkedin-postaus-v2.md

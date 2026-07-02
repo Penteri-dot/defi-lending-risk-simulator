@@ -1,11 +1,4 @@
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { calculateRisk } from "../api/client";
 import { DEFAULT_PRICES } from "../constants";
 import type {
@@ -14,10 +7,11 @@ import type {
   Position,
   RiskCalculationResponse,
 } from "../types";
+import { PortfolioContext } from "./usePortfolio";
 
 // ── Default demo portfolio ────────────────────────────────────────────────────
 
-export const DEFAULT_PORTFOLIO: Portfolio = {
+const DEFAULT_PORTFOLIO: Portfolio = {
   collateral: [
     { asset: "BTC", amount: 0.5 },
     { asset: "ETH", amount: 10 },
@@ -44,31 +38,6 @@ function saveToStorage(p: Portfolio) {
   } catch {
     // storage unavailable — ignore
   }
-}
-
-// ── Context types ─────────────────────────────────────────────────────────────
-
-interface PortfolioContextValue {
-  portfolio: Portfolio;
-  riskData: RiskCalculationResponse | null;
-  isLoading: boolean;
-  apiError: string | null;
-
-  addCollateral: (pos: Position) => void;
-  removeCollateral: (index: number) => void;
-  addBorrow: (pos: Position) => void;
-  removeBorrow: (index: number) => void;
-  updatePrice: (asset: AssetSymbol, price: number) => void;
-  setPrices: (prices: Record<AssetSymbol, number>) => void;
-  resetPortfolio: () => void;
-}
-
-const PortfolioContext = createContext<PortfolioContextValue | null>(null);
-
-export function usePortfolio(): PortfolioContextValue {
-  const ctx = useContext(PortfolioContext);
-  if (!ctx) throw new Error("usePortfolio must be used inside PortfolioProvider");
-  return ctx;
 }
 
 // ── Provider ──────────────────────────────────────────────────────────────────

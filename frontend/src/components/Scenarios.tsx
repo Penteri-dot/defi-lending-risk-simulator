@@ -10,7 +10,7 @@ import {
   YAxis,
 } from "recharts";
 import { listScenarios, replayScenario } from "../api/client";
-import { usePortfolio } from "../context/PortfolioContext";
+import { usePortfolio } from "../context/usePortfolio";
 import type { ScenarioInfo, ScenarioReplayResponse } from "../types";
 import {
   formatHealthFactor,
@@ -40,8 +40,12 @@ export function Scenarios() {
   useEffect(() => {
     if (!selected) return;
     let cancelled = false;
+    // Reset loading/error when a fresh scenario fetch starts. This is the
+    // intended render, not an accidental cascade — hence the scoped disable.
+    /* eslint-disable react-hooks/set-state-in-effect */
     setLoading(true);
     setError(null);
+    /* eslint-enable react-hooks/set-state-in-effect */
     replayScenario(selected, {
       collateral: portfolio.collateral,
       borrows: portfolio.borrows,

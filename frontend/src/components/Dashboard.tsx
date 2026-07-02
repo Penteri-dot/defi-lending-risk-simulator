@@ -1,4 +1,4 @@
-import { usePortfolio } from "../context/PortfolioContext";
+import { usePortfolio } from "../context/usePortfolio";
 import { HealthFactorGauge } from "./HealthFactorGauge";
 import { CollateralPieChart } from "./CollateralPieChart";
 import { ASSET_CONFIG } from "../constants";

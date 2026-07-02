@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { runStressTest } from "../api/client";
-import { usePortfolio } from "../context/PortfolioContext";
+import { usePortfolio } from "../context/usePortfolio";
 import { StressBarChart } from "./StressBarChart";
 import type { AssetSymbol, StressTestResponse } from "../types";
 import {

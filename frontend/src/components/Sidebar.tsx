@@ -1,5 +1,5 @@
 import type { View } from "../types";
-import { usePortfolio } from "../context/PortfolioContext";
+import { usePortfolio } from "../context/usePortfolio";
 import {
   formatUSD,
   formatPercent,
